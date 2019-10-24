@@ -32,10 +32,12 @@ private:
     Noeud*  affectation(); // <affectation> ::= <variable> = <expression> 
     Noeud*  expression();  //  <expression> ::= <facteur> { <opBinaire> <facteur> }
     Noeud*  facteur();     //     <facteur> ::= <entier>  |  <variable>  |  - <facteur>  | non <facteur> | ( <expression> )
+    Noeud*  instTantQue(); //   <instRepeter> ::=repeter <seqInst> jusqua( <expression> )        
                            //   <opBinaire> ::= + | - | *  | / | < | > | <= | >= | == | != | et | ou
     Noeud*  instSi();      //      <instSi> ::= si ( <expression> ) <seqInst> finsi
-
-    // outils pour simplifier l'analyse syntaxique
+    Noeud* instRepeter();  //   <instRepeter> ::=repeter <seqInst> jusqua( <expression> )
+    Noeud* instPour();     //   <instPour>    ::=pour( [ <affectation> ] ; <expression> ;[ <affectation> ]) <seqInst> finpour
+                             // outils pour simplifier l'analyse syntaxique
     void tester (const string & symboleAttendu) const;   // Si symbole courant != symboleAttendu, on lève une exception
     void testerEtAvancer(const string & symboleAttendu); // Si symbole courant != symboleAttendu, on lève une exception, sinon on avance
     void erreur (const string & mess) const;             // Lève une exception "contenant" le message mess

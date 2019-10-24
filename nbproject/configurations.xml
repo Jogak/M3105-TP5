@@ -52,7 +52,6 @@
       <compileType>
         <ccTool>
           <standard>8</standard>
-          <commandLine>-lcppunit</commandLine>
         </ccTool>
       </compileType>
       <item path="ArbreAbstrait.cpp" ex="false" tool="1" flavor2="0">

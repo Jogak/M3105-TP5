@@ -104,9 +104,14 @@ NoeudInstPour::NoeudInstPour(Noeud* affectation1, Noeud* expression, Noeud* affe
 }
 
 int NoeudInstPour::executer(){
-    m_affectation1->executer();
+   if(m_affectation1 !=NULL) {
+       m_affectation1->executer();
+   }
     while(m_expression->executer()){
         m_sequence->executer();
-        m_affectation2->executer();
+        if(m_affectation2 != NULL){
+            m_affectation2->executer();
+        }
     }
+    return 0;
 }
