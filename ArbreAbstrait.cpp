@@ -3,6 +3,7 @@
 #include "Symbole.h"
 #include "SymboleValue.h"
 #include "Exceptions.h"
+#include <vector>
 
 ////////////////////////////////////////////////////////////////////////////////
 // NoeudSeqInst
@@ -71,12 +72,22 @@ int NoeudOperateurBinaire::executer() {
 // NoeudInstSi
 ////////////////////////////////////////////////////////////////////////////////
 
-NoeudInstSi::NoeudInstSi(Noeud* condition, Noeud* sequence)
+NoeudInstSi::NoeudInstSi(vector<Noeud*> condition, vector<Noeud*> sequence)
 : m_condition(condition), m_sequence(sequence) {
 }
 
 int NoeudInstSi::executer() {
-  if (m_condition->executer()) m_sequence->executer();
+    for(int i = 0; i<m_condition.size();i++){
+        
+        if( m_condition[i] != nullptr){
+            if(m_condition[i]->executer() == true){
+                m_sequence[i]->executer();
+                return 0;
+            }
+        } else{
+            m_sequence[i]->executer();
+        }
+    }
   return 0; // La valeur renvoyée ne représente rien !
 }
 
