@@ -1,6 +1,7 @@
 #include "Interpreteur.h"
 #include <stdlib.h>
 #include <iostream>
+#include <typeinfo>
 using namespace std;
 
 Interpreteur::Interpreteur(ifstream & fichier) :
@@ -197,5 +198,17 @@ Noeud* Interpreteur::instPour(){
 
 Noeud* Interpreteur::instEcrire(){
     // <instEcrire>  ::=ecrire( <expression> | <chaine> {, <expression> | <chaine> })
+    testerEtAvancer("ecrire");
+    testerEtAvancer("(");
+    // on regarde si l’objet pointé par p est de type SymboleValue et si c’est une chaîne
+    if ( (typeid(*instEcrire)==typeid(SymboleValue) &&  *((SymboleValue*)instEcrire)== "<CHAINE>" ){
+        
+    }
+    
+    if (testerEtAvancer(",")== true ){
+        
+    }
+    testerEtAvancer(")");
+    
     return nullptr;
 }
