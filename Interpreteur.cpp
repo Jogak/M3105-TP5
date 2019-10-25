@@ -200,27 +200,31 @@ Noeud* Interpreteur::instEcrire(){
     // <instEcrire>  ::=ecrire( <expression> | <chaine> {, <expression> | <chaine> })
     testerEtAvancer("ecrire");
     testerEtAvancer("(");
+    Noeud* expression1;
+    Noeud* chaine1;
+    Noeud* expression2;
+    Noeud* chaine2;
     // on regarde si l’objet pointé par p est de type SymboleValue et si c’est une chaîne
     if(typeid(*instEcrire)==typeid(SymboleValue) &&  *((SymboleValue*)instEcrire)== "<CHAINE>" ){
-        Noeud* expression1 = NULL;
-        Noeud* chaine1=SymboleValue;
+        expression1 = NULL;
+        chaine1=SymboleValue;
     }else{
-        Noeud* expression1 = expression1();
-        Noeud* chaine1 = NULL;
+        expression1 = expression1();
+        chaine1 = NULL;
     }
     if(testerEtAvancer(",")== true ){
         testerEtAvancer(",");
         // on regarde si l’objet pointé par p est de type SymboleValue et si c’est une chaîne
         if(typeid(*instEcrire)==typeid(SymboleValue) &&  *((SymboleValue*)instEcrire)== "<CHAINE>" ){
-            Noeud* expression2 = NULL;
-            Noeud* chaine2 = SymboleValue;
+            expression2 = NULL;
+            chaine2 = SymboleValue;
         } else {
-            Noeud* expression2 = expression2();
-            Noeud* chaine2 = NULL;
+            expression2 = expression2();
+            chaine2 = NULL;
         }
     }
     testerEtAvancer(")");
     
-    //return new NoeudInstEcrire(expression1, chaine1, expression2, chaine2);
-    return nullptr;
+    return new NoeudInstEcrire(expression1, chaine1, expression2, chaine2);
+    //return nullptr;
 }
