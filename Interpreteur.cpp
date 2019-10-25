@@ -221,5 +221,6 @@ Noeud* Interpreteur::instEcrire(){
     }
     testerEtAvancer(")");
     
-    return new NoeudInstEcrire(expression1, chaine1, expression2, chaine2);
+    //return new NoeudInstEcrire(expression1, chaine1, expression2, chaine2);
+    return nullptr;
 }
