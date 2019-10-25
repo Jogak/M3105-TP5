@@ -113,6 +113,10 @@ NoeudInstPour::NoeudInstPour(Noeud* affectation1, Noeud* expression, Noeud* affe
 :m_affectation1(affectation1), m_affectation2(affectation2), m_expression(expression), m_sequence(sequence){
 }
 
+NoeudInstEcrire::NoeudInstEcrire(Noeud* expression1, Noeud* chaine1, Noeud* expression2, Noeud* chaine2)
+:m_expression1(expression1), m_chaine1(chaine1), m_expression2(expression2), m_chaine2(chaine2){    
+}
+
 int NoeudInstPour::executer(){
    if(m_affectation1 !=NULL) {
        m_affectation1->executer();

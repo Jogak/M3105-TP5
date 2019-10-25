@@ -119,5 +119,17 @@ private:
     Noeud* m_sequence;
 };
 
+class NoeudInstEcrire : public Noeud {
+public:
+    NoeudInstEcrire(Noeud* expression1, Noeud* chaine1, Noeud* expression2, Noeud* chaine2);
+    ~NoeudInstEcrire() {}
+    int executer() override;
+    
+private:
+    Noeud* m_expression1;
+    Noeud* m_expression2;
+    Noeud* m_chaine1;
+    Noeud* m_chaine2;
+};
 
 #endif /* ARBREABSTRAIT_H */
