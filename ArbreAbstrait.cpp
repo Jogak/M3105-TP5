@@ -73,8 +73,8 @@ int NoeudOperateurBinaire::executer() {
 ////////////////////////////////////////////////////////////////////////////////
 
 NoeudInstSi::NoeudInstSi(vector<Noeud*> condition, vector<Noeud*> sequence)
-: m_condition(condition), m_sequence(sequence) {
-}
+    : m_condition(condition), m_sequence(sequence) {
+    }
 
 int NoeudInstSi::executer() {
     for(int i = 0; i<m_condition.size();i++){
@@ -111,6 +111,19 @@ int NoeudInstRepeter::executer(){
 
 NoeudInstPour::NoeudInstPour(Noeud* affectation1, Noeud* expression, Noeud* affectation2, Noeud* sequence)
 :m_affectation1(affectation1), m_affectation2(affectation2), m_expression(expression), m_sequence(sequence){
+}
+
+int NoeudInstPour::executer(){
+   if(m_affectation1 !=NULL) {
+       m_affectation1->executer();
+   }
+    while(m_expression->executer()){
+        m_sequence->executer();
+        if(m_affectation2 != NULL){
+            m_affectation2->executer();
+        }
+    }
+    return 0;
 }
 
 NoeudInstEcrire::NoeudInstEcrire(Noeud* expression1, Noeud* chaine1, Noeud* expression2, Noeud* chaine2)
