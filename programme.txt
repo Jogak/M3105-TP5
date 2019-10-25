@@ -3,14 +3,12 @@
 procedure principale()
   i = 1;
   k = 3;
-si(i == 2)
+si(i <= 1)
 k = 0;
-sinonsi (k>1)
-i = 10;
-sinonsi(i <10)
-i = 99;
+sinonsi(k==0)
+i = 100;
 sinon
-k = 12;
+k=50;
 finsi
 finproc
 # Commentaire Final

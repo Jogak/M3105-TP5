@@ -1,0 +1,8 @@
+procedure principale()
+
+i = 3;
+j = 0;
+tantque(j<i)
+j = j+1;
+fintantque
+finproc

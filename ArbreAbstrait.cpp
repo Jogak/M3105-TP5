@@ -78,7 +78,6 @@ NoeudInstSi::NoeudInstSi(vector<Noeud*> condition, vector<Noeud*> sequence)
 
 int NoeudInstSi::executer() {
     for(int i = 0; i<m_condition.size();i++){
-        
         if( m_condition[i] != nullptr){
             if(m_condition[i]->executer() == true){
                 m_sequence[i]->executer();
