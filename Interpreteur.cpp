@@ -58,14 +58,9 @@ Noeud* Interpreteur::seqInst() {
   do {
     sequence->ajoute(inst());
   } while (m_lecteur.getSymbole() == "<VARIABLE>" || m_lecteur.getSymbole() == "si"
-<<<<<<< HEAD
-          || m_lecteur.getSymbole() == "tantque" 
-          || m_lecteur.getSymbole() == "repeter"  || m_lecteur.getSymbole() == "pour");
-=======
-          || m_lecteur.getSymbole() == "tantque" || m_lecteur.getSymbole() == "repeter" 
-          || m_lecteur.getSymbole() == "pour"
-          || m_lecteur.getSymbole() == "ecrire");
->>>>>>> 02248034631a7f4d3c5b604835c2e397800577f7
+          || m_lecteur.getSymbole() == "tantque"  || m_lecteur.getSymbole() == "repeter" 
+          || m_lecteur.getSymbole() == "pour"    || m_lecteur.getSymbole() == "ecrire"
+          || m_lecteur.getSymbole() == "lire");
   // Tant que le symbole courant est un début possible d'instruction...
   // Il faut compléter cette condition chaque fois qu'on rajoute une nouvelle instruction
   return sequence;
@@ -89,6 +84,8 @@ Noeud* Interpreteur::inst() {
       return instPour();
   else if (m_lecteur.getSymbole() == "ecrire")
       return instEcrire();
+  else if (m_lecteur.getSymbole() == "lire")
+      return instLire();
   else {
       erreur("Instruction incorrecte");
       return nullptr;
