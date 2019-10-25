@@ -197,34 +197,35 @@ Noeud* Interpreteur::instPour(){
 }
 
 Noeud* Interpreteur::instEcrire(){
-    // <instEcrire>  ::=ecrire( <expression> | <chaine> {, <expression> | <chaine> })
+       // <instEcrire>  ::= ecrire( <expression> | <chaine> {, <expression> | <chaine> })
+    Noeud* noeud = nullptr;
+    Noeud* noeud2 = nullptr;
     testerEtAvancer("ecrire");
     testerEtAvancer("(");
-    Noeud* expression1;
-    Noeud* chaine1;
-    Noeud* expression2;
-    Noeud* chaine2;
-    // on regarde si l’objet pointé par p est de type SymboleValue et si c’est une chaîne
-    if(typeid(*instEcrire)==typeid(SymboleValue) &&  *((SymboleValue*)instEcrire)== "<CHAINE>" ){
-        expression1 = NULL;
-        chaine1=SymboleValue;
-    }else{
-        expression1 = expression1();
-        chaine1 = NULL;
+
+    if (m_lecteur.getSymbole() == "<CHAINE>") {
+        noeud = m_table.chercheAjoute(m_lecteur.getSymbole()); // on ajoute la variable ou l'entier à la table
+        m_lecteur.avancer();
+        
+    }else{ // sinon c'est une expression
+        noeud = expression();
     }
-    if(testerEtAvancer(",")== true ){
+    
+    vector<Noeud*> noeudsSupp;
+    
+    while(m_lecteur.getSymbole()==","){ 
         testerEtAvancer(",");
-        // on regarde si l’objet pointé par p est de type SymboleValue et si c’est une chaîne
-        if(typeid(*instEcrire)==typeid(SymboleValue) &&  *((SymboleValue*)instEcrire)== "<CHAINE>" ){
-            expression2 = NULL;
-            chaine2 = SymboleValue;
-        } else {
-            expression2 = expression2();
-            chaine2 = NULL;
+        if (m_lecteur.getSymbole() == "<CHAINE>") {
+            noeud2 = m_table.chercheAjoute(m_lecteur.getSymbole()); 
+            m_lecteur.avancer();
+            noeudsSupp.push_back(noeud2);
+        }else { 
+            noeud2 = expression();
+            noeudsSupp.push_back(noeud2);
         }
     }
     testerEtAvancer(")");
+    testerEtAvancer(";");
     
-    return new NoeudInstEcrire(expression1, chaine1, expression2, chaine2);
-    //return nullptr;
+    return new NoeudInstEcrire(noeud,noeudsSupp);
 }
