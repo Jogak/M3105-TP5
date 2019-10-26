@@ -24,6 +24,9 @@ private:
     Lecteur        m_lecteur;  // Le lecteur de symboles utilisé pour analyser le fichier
     TableSymboles  m_table;    // La table des symboles valués
     Noeud*         m_arbre;    // L'arbre abstrait
+    std::vector<Noeud*> vectNoeuds;
+    std::vector<SymboleValue*> vectSymbValues;
+    const Symbole  chaine; 
 
     // Implémentation de la grammaire
     Noeud*  programme();   //   <programme> ::= procedure principale() <seqInst> finproc FIN_FICHIER
@@ -38,6 +41,7 @@ private:
     Noeud* instRepeter();  //   <instRepeter> ::=repeter <seqInst> jusqua( <expression> )
     Noeud* instPour();     //   <instPour>    ::=pour( [ <affectation> ] ; <expression> ;[ <affectation> ]) <seqInst> finpour
    
+    Noeud* instEcrire(); // <instEcrire>  ::=ecrire(<expression> |<chaine> {,<expression> | <chaine> })
                              // outils pour simplifier l'analyse syntaxique
     void tester (const string & symboleAttendu) const;   // Si symbole courant != symboleAttendu, on lève une exception
     void testerEtAvancer(const string & symboleAttendu); // Si symbole courant != symboleAttendu, on lève une exception, sinon on avance
@@ -45,3 +49,5 @@ private:
 };
 
 #endif /* INTERPRETEUR_H */
+
+
