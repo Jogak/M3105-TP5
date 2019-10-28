@@ -128,4 +128,21 @@ private:
     vector<Noeud*> m_var;
 };
 
+class NoeudInstEcrire : public Noeud {
+// Classe pour représenter un noeud "instruction ecrire"
+//  et ses 2 fils : un noeud , et vecteur de noeud supplémentaires
+  public:
+    NoeudInstEcrire(Noeud* noeudPremierElement, vector<Noeud*> noeudsSupp);
+     // Construit une instruction ecrire avec les vector de noeuds mis en paramètre.
+   ~NoeudInstEcrire() {}; // A cause du destructeur virtuel de la classe Noeud
+    int executer();  // Exécute l'instruction ecrire : ecrire ( <expression> | <chaine> puis potentiellement d'autres)
+        void traduitEnCPP(ostream & cout,unsigned int indentation) const;
+    
+
+  private:
+      Noeud* m_noeud;
+      vector<Noeud*> m_noeudsSupp;
+};
+
 #endif /* ARBREABSTRAIT_H */
+

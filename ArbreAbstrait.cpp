@@ -5,7 +5,7 @@
 #include "Exceptions.h"
 #include <vector>
 #include <iostream>
-
+#include <typeinfo>
 ////////////////////////////////////////////////////////////////////////////////
 // NoeudSeqInst
 ////////////////////////////////////////////////////////////////////////////////
@@ -127,6 +127,7 @@ int NoeudInstPour::executer(){
     return 0;
 }
 
+
 NoeudInstLire::NoeudInstLire(vector<Noeud*> var)
 : m_var(var){}
 
@@ -139,3 +140,31 @@ int NoeudInstLire::executer(){
     }
     return 0;
 }
+
+NoeudInstEcrire::NoeudInstEcrire(Noeud* noeudPremierElement, vector<Noeud*> noeudsSupp)
+: m_noeud(noeudPremierElement), m_noeudsSupp(noeudsSupp) {
+}
+
+int NoeudInstEcrire::executer() {
+    Noeud* p;
+    p = m_noeud; // on pointe sur le noeud du premier element
+
+    // on regarde si l’objet pointé par p est de type SymboleValue et si c’est une chaîne
+    if ((typeid (*p) == typeid (SymboleValue)) && (*((SymboleValue*) p) == "<CHAINE>" )) {
+        cout << ((SymboleValue*) p)->getChaine() ; //on affiche la chaine de caractere du symbole value de p
+    } else {
+        cout << p->executer() ; // on affiche le résultat
+    }
+
+    for (int i = 0; i < m_noeudsSupp.size(); i++) {
+        cout << " , ";
+        p = m_noeudsSupp[i]; // on fait pointer p sur l'élément courant du vecteur
+        if ((typeid (*p) == typeid (SymboleValue)) && (*((SymboleValue*) p) == "<CHAINE>" )) {
+            cout << ((SymboleValue*) p)->getChaine(); //on affiche la chaîne de caractères
+        } else {
+            cout << p->executer(); // on affiche le résultat
+        }
+    }
+    return 0;
+}
+
