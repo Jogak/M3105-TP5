@@ -119,6 +119,15 @@ private:
     Noeud* m_sequence;
 };
 
+class NoeudInstLire : public Noeud {
+public:
+    NoeudInstLire(vector<Noeud*> var);
+    ~NoeudInstLire() {}
+    int executer() override;
+private:
+    vector<Noeud*> m_var;
+};
+
 class NoeudInstEcrire : public Noeud {
 // Classe pour représenter un noeud "instruction ecrire"
 //  et ses 2 fils : un noeud , et vecteur de noeud supplémentaires
@@ -134,8 +143,6 @@ class NoeudInstEcrire : public Noeud {
       Noeud* m_noeud;
       vector<Noeud*> m_noeudsSupp;
 };
-
-
 
 #endif /* ARBREABSTRAIT_H */
 

@@ -4,6 +4,7 @@
 #include "SymboleValue.h"
 #include "Exceptions.h"
 #include <vector>
+#include <iostream>
 #include <typeinfo>
 ////////////////////////////////////////////////////////////////////////////////
 // NoeudSeqInst
@@ -122,6 +123,20 @@ int NoeudInstPour::executer(){
         if(m_affectation2 != NULL){
             m_affectation2->executer();
         }
+    }
+    return 0;
+}
+
+
+NoeudInstLire::NoeudInstLire(vector<Noeud*> var)
+: m_var(var){}
+
+int NoeudInstLire::executer(){
+    for(auto i : m_var){
+        cout << ((SymboleValue*) i)->getChaine() << ":";
+        int valeur;
+        cin >> valeur;
+        ((SymboleValue*)i)->setValeur(valeur);
     }
     return 0;
 }
