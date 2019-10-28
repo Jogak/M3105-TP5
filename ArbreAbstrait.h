@@ -119,6 +119,13 @@ private:
     Noeud* m_sequence;
 };
 
-
+class NoeudInstLire : public Noeud {
+public:
+    NoeudInstLire(vector<Noeud*> var);
+    ~NoeudInstLire() {}
+    int executer() override;
+private:
+    vector<Noeud*> m_var;
+};
 
 #endif /* ARBREABSTRAIT_H */
