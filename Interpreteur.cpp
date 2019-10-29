@@ -69,28 +69,35 @@ Noeud* Interpreteur::seqInst() {
 
 Noeud* Interpreteur::inst() {
   // <inst> ::= <affectation>  ; | <instSi>
-  if (m_lecteur.getSymbole() == "<VARIABLE>") {
-    Noeud *affect = affectation();
-    testerEtAvancer(";");
-    return affect;
-  }
-  else if (m_lecteur.getSymbole() == "si")
-    return instSi();
-  // Compléter les alternatives chaque fois qu'on rajoute une nouvelle instruction
-  else if (m_lecteur.getSymbole() == "tantque")
-      return instTantQue();
-  else if (m_lecteur.getSymbole() == "repeter")
-      return instRepeter();
-  else if (m_lecteur.getSymbole() == "pour")
-      return instPour();
-  else if (m_lecteur.getSymbole() == "lire")
-      return instLire();
-  else if (m_lecteur.getSymbole() == "ecrire")
-            return instEcrire();
-  else {
-      erreur("Instruction incorrecte");
-      return nullptr;
-  }
+    try{
+      if (m_lecteur.getSymbole() == "<VARIABLE>") {
+        Noeud *affect = affectation();
+        testerEtAvancer(";");
+        return affect;
+      }
+      else if (m_lecteur.getSymbole() == "si")
+        return instSi();
+      // Compléter les alternatives chaque fois qu'on rajoute une nouvelle instruction
+      else if (m_lecteur.getSymbole() == "tantque")
+          return instTantQue();
+      else if (m_lecteur.getSymbole() == "repeter")
+          return instRepeter();
+      else if (m_lecteur.getSymbole() == "pour")
+          return instPour();
+      else if (m_lecteur.getSymbole() == "lire")
+          return instLire();
+      else if (m_lecteur.getSymbole() == "ecrire")
+                return instEcrire();
+      else {
+          erreur("Instruction incorrecte");
+      }
+    }catch(SyntaxeException const& e){ // on récupère l'exception qui a été levée
+        cout << e.what() << endl;
+        while((m_lecteur.getSymbole()!="si"&& m_lecteur.getSymbole()!="tantque" && m_lecteur.getSymbole()!="pour" &&
+               m_lecteur.getSymbole()!="ecrire" && m_lecteur.getSymbole()!="lire") && m_lecteur.getSymbole()!="<FINDEFICHIER>"){
+            m_lecteur.avancer(); // on fait avancer le lecteur tant qu'il ne lit pas un des symbole du while
+        }
+    }
 }
 
 Noeud* Interpreteur::affectation() {
@@ -273,6 +280,10 @@ Noeud* Interpreteur::instEcrire() {
     return new NoeudInstEcrire(noeud,noeudsSupp); // on retourne un noeud inst Ecrire
 }
    
+
+
+
+
 
 
 
