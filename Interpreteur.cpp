@@ -214,3 +214,4 @@ Noeud* Interpreteur::instPour(){
     return new NoeudInstPour(affectation1, expr, affectation2, sequence);
 }
 
+
