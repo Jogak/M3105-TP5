@@ -167,4 +167,3 @@ int NoeudInstEcrire::executer() {
     }
     return 0;
 }
-

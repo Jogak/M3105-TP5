@@ -136,7 +136,7 @@ class NoeudInstEcrire : public Noeud {
      // Construit une instruction ecrire avec les vector de noeuds mis en paramètre.
    ~NoeudInstEcrire() {}; // A cause du destructeur virtuel de la classe Noeud
     int executer();  // Exécute l'instruction ecrire : ecrire ( <expression> | <chaine> puis potentiellement d'autres)
-        void traduitEnCPP(ostream & cout,unsigned int indentation) const;
+       // void traduitEnCPP(ostream & cout,unsigned int indentation) const;
     
 
   private:
@@ -145,4 +145,3 @@ class NoeudInstEcrire : public Noeud {
 };
 
 #endif /* ARBREABSTRAIT_H */
-

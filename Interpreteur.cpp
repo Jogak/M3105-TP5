@@ -69,6 +69,7 @@ Noeud* Interpreteur::seqInst() {
 
 Noeud* Interpreteur::inst() {
   // <inst> ::= <affectation>  ; | <instSi>
+
     try{
       if (m_lecteur.getSymbole() == "<VARIABLE>") {
         Noeud *affect = affectation();
@@ -90,6 +91,23 @@ Noeud* Interpreteur::inst() {
                 return instEcrire();
       else {
           erreur("Instruction incorrecte");
+          return nullptr;
+      }
+    }catch(SyntaxeException const& e){ // on récupère l'exception qui a été levée
+        cout << e.what() << endl;
+        if (m_lecteur.getSymbole() != "finproc"){
+        while(m_lecteur.getSymbole() != ";"){
+            m_lecteur.avancer();
+        }
+        }
+        while((m_lecteur.getSymbole()!="si"&& m_lecteur.getSymbole()!="tantque" && m_lecteur.getSymbole()!="pour" &&
+               m_lecteur.getSymbole()!="ecrire" && m_lecteur.getSymbole()!="lire") && m_lecteur.getSymbole()!="<FINDEFICHIER>"
+                && m_lecteur.getSymbole() !="<VARIABLE>"  && m_lecteur.getSymbole() !="finproc" ){
+            m_lecteur.avancer(); // on fait avancer le lecteur tant qu'il ne lit pas un des symbole du while
+            
+        }
+        m_arbre = nullptr;
+        return nullptr;
       }
     }catch(SyntaxeException const& e){ // on récupère l'exception qui a été levée
         cout << e.what() << endl;
@@ -178,6 +196,7 @@ Noeud* Interpreteur::instSi() {
       vectorSeq.push_back(sequence);
   }
     testerEtAvancer("finsi");
+    testerEtAvancer(";");
   return new NoeudInstSi( vectorCond,vectorSeq); // Et on renvoie un noeud Instruction Si
 }
 
@@ -187,8 +206,10 @@ Noeud* Interpreteur::instTantQue() {
   testerEtAvancer("(");
   Noeud* condition = expression(); // On mémorise la condition
   testerEtAvancer(")");
+  testerEtAvancer(";");
   Noeud* sequence = seqInst();     // On mémorise la séquence d'instruction
   testerEtAvancer("fintantque");
+  testerEtAvancer(";");
   return new NoeudInstTantQue(condition, sequence); // Et on renvoie un noeud Instruction Tant Que
 }
 
@@ -200,6 +221,7 @@ Noeud* Interpreteur::instRepeter(){
     testerEtAvancer("(");
     Noeud* condition = expression();
     testerEtAvancer(")");
+    testerEtAvancer(";");
     return new NoeudInstRepeter(condition, sequence);
 }
 
@@ -220,8 +242,10 @@ Noeud* Interpreteur::instPour(){
         m_lecteur.avancer();
     }
     testerEtAvancer(")");
+    testerEtAvancer(";");
     Noeud* sequence = seqInst();
     testerEtAvancer("finpour");
+    testerEtAvancer(";");
     return new NoeudInstPour(affectation1, expr, affectation2, sequence);
 }
 
@@ -240,7 +264,7 @@ Noeud* Interpreteur::instLire(){
             testerEtAvancer(",");
         }else{
             testerEtAvancer(")");
-          testerEtAvancer(";");
+            testerEtAvancer(";");
         }
         var = m_table.chercheAjoute(m_lecteur.getSymbole());
     }    
@@ -280,10 +304,4 @@ Noeud* Interpreteur::instEcrire() {
     
     return new NoeudInstEcrire(noeud,noeudsSupp); // on retourne un noeud inst Ecrire
 }
-   
-
-
-
-
-
 
