@@ -119,17 +119,30 @@ private:
     Noeud* m_sequence;
 };
 
-class NoeudInstEcrire : public Noeud {
+class NoeudInstLire : public Noeud {
 public:
-    NoeudInstEcrire(Noeud* expression1, Noeud* chaine1, Noeud* expression2, Noeud* chaine2);
-    ~NoeudInstEcrire() {}
+    NoeudInstLire(vector<Noeud*> var);
+    ~NoeudInstLire() {}
     int executer() override;
-    
 private:
-    Noeud* m_expression1;
-    Noeud* m_expression2;
-    Noeud* m_chaine1;
-    Noeud* m_chaine2;
+    vector<Noeud*> m_var;
+};
+
+class NoeudInstEcrire : public Noeud {
+// Classe pour représenter un noeud "instruction ecrire"
+//  et ses 2 fils : un noeud , et vecteur de noeud supplémentaires
+  public:
+    NoeudInstEcrire(Noeud* noeudPremierElement, vector<Noeud*> noeudsSupp);
+     // Construit une instruction ecrire avec les vector de noeuds mis en paramètre.
+   ~NoeudInstEcrire() {}; // A cause du destructeur virtuel de la classe Noeud
+    int executer();  // Exécute l'instruction ecrire : ecrire ( <expression> | <chaine> puis potentiellement d'autres)
+        void traduitEnCPP(ostream & cout,unsigned int indentation) const;
+    
+
+  private:
+      Noeud* m_noeud;
+      vector<Noeud*> m_noeudsSupp;
 };
 
 #endif /* ARBREABSTRAIT_H */
+

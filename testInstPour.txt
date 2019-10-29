@@ -1,0 +1,7 @@
+procedure principale()
+i = 1;
+k = 19;
+pour(;i<10;i=i+1)
+k = k+1;
+finpour
+finproc

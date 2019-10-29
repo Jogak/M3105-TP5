@@ -4,7 +4,8 @@
 #include "SymboleValue.h"
 #include "Exceptions.h"
 #include <vector>
-
+#include <iostream>
+#include <typeinfo>
 ////////////////////////////////////////////////////////////////////////////////
 // NoeudSeqInst
 ////////////////////////////////////////////////////////////////////////////////
@@ -126,19 +127,44 @@ int NoeudInstPour::executer(){
     return 0;
 }
 
-NoeudInstEcrire::NoeudInstEcrire(Noeud* expression1, Noeud* chaine1, Noeud* expression2, Noeud* chaine2)
-:m_expression1(expression1), m_chaine1(chaine1), m_expression2(expression2), m_chaine2(chaine2){    
+
+NoeudInstLire::NoeudInstLire(vector<Noeud*> var)
+: m_var(var){}
+
+int NoeudInstLire::executer(){
+    for(auto i : m_var){
+        cout << ((SymboleValue*) i)->getChaine() << ":";
+        int valeur;
+        cin >> valeur;
+        ((SymboleValue*)i)->setValeur(valeur);
+    }
+    return 0;
 }
 
-int NoeudInstPour::executer(){
-   if(m_affectation1 !=NULL) {
-       m_affectation1->executer();
-   }
-    while(m_expression->executer()){
-        m_sequence->executer();
-        if(m_affectation2 != NULL){
-            m_affectation2->executer();
+NoeudInstEcrire::NoeudInstEcrire(Noeud* noeudPremierElement, vector<Noeud*> noeudsSupp)
+: m_noeud(noeudPremierElement), m_noeudsSupp(noeudsSupp) {
+}
+
+int NoeudInstEcrire::executer() {
+    Noeud* p;
+    p = m_noeud; // on pointe sur le noeud du premier element
+
+    // on regarde si l’objet pointé par p est de type SymboleValue et si c’est une chaîne
+    if ((typeid (*p) == typeid (SymboleValue)) && (*((SymboleValue*) p) == "<CHAINE>" )) {
+        cout << ((SymboleValue*) p)->getChaine() ; //on affiche la chaine de caractere du symbole value de p
+    } else {
+        cout << p->executer() ; // on affiche le résultat
+    }
+
+    for (int i = 0; i < m_noeudsSupp.size(); i++) {
+        cout << " , ";
+        p = m_noeudsSupp[i]; // on fait pointer p sur l'élément courant du vecteur
+        if ((typeid (*p) == typeid (SymboleValue)) && (*((SymboleValue*) p) == "<CHAINE>" )) {
+            cout << ((SymboleValue*) p)->getChaine(); //on affiche la chaîne de caractères
+        } else {
+            cout << p->executer(); // on affiche le résultat
         }
     }
     return 0;
 }
+
