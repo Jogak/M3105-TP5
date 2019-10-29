@@ -69,7 +69,8 @@ Noeud* Interpreteur::seqInst() {
 
 Noeud* Interpreteur::inst() {
   // <inst> ::= <affectation>  ; | <instSi>
-try{
+
+    try{
       if (m_lecteur.getSymbole() == "<VARIABLE>") {
         Noeud *affect = affectation();
         testerEtAvancer(";");
@@ -107,6 +108,13 @@ try{
         }
         m_arbre = nullptr;
         return nullptr;
+      }
+    }catch(SyntaxeException const& e){ // on récupère l'exception qui a été levée
+        cout << e.what() << endl;
+        while((m_lecteur.getSymbole()!="si"&& m_lecteur.getSymbole()!="tantque" && m_lecteur.getSymbole()!="pour" &&
+               m_lecteur.getSymbole()!="ecrire" && m_lecteur.getSymbole()!="lire") && m_lecteur.getSymbole()!="<FINDEFICHIER>"){
+            m_lecteur.avancer(); // on fait avancer le lecteur tant qu'il ne lit pas un des symbole du while
+        }
     }
 }
 
@@ -241,6 +249,7 @@ Noeud* Interpreteur::instPour(){
     return new NoeudInstPour(affectation1, expr, affectation2, sequence);
 }
 
+
 Noeud* Interpreteur::instLire(){
     // <instLire> ::= lire ( <variable> { , <variable> } )
     vector<Noeud*> vectorVar;
@@ -294,3 +303,5 @@ Noeud* Interpreteur::instEcrire() {
     testerEtAvancer(";");
     
     return new NoeudInstEcrire(noeud,noeudsSupp); // on retourne un noeud inst Ecrire
+}
+
