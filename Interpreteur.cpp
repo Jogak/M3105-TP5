@@ -230,6 +230,7 @@ Noeud* Interpreteur::instLire(){
             testerEtAvancer(",");
         }else{
             testerEtAvancer(")");
+            testerEtAvancer(";");
         }
         var = m_table.chercheAjoute(m_lecteur.getSymbole());
     }    
