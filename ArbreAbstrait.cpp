@@ -5,7 +5,7 @@
 #include "Exceptions.h"
 #include <vector>
 #include <iostream>
-
+#include <typeinfo>
 ////////////////////////////////////////////////////////////////////////////////
 // NoeudSeqInst
 ////////////////////////////////////////////////////////////////////////////////
@@ -126,6 +126,7 @@ int NoeudInstPour::executer(){
     }
     return 0;
 }
+
 
 NoeudInstLire::NoeudInstLire(vector<Noeud*> var)
 : m_var(var){}

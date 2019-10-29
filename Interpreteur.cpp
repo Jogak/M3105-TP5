@@ -294,4 +294,3 @@ Noeud* Interpreteur::instEcrire() {
     testerEtAvancer(";");
     
     return new NoeudInstEcrire(noeud,noeudsSupp); // on retourne un noeud inst Ecrire
-}
