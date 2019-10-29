@@ -225,6 +225,7 @@ Noeud* Interpreteur::instPour(){
     return new NoeudInstPour(affectation1, expr, affectation2, sequence);
 }
 
+
 Noeud* Interpreteur::instLire(){
     // <instLire> ::= lire ( <variable> { , <variable> } )
     vector<Noeud*> vectorVar;
@@ -280,7 +281,6 @@ Noeud* Interpreteur::instEcrire() {
     return new NoeudInstEcrire(noeud,noeudsSupp); // on retourne un noeud inst Ecrire
 }
    
-
 
 
 
