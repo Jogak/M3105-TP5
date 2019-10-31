@@ -2,10 +2,20 @@
 # Les lignes de commentaires commencent par #
 procedure principale()
 i = 0;
-j  = 19
-tantque(i<10)
-i = i 1;
-j = j+;
+k = 13;
+j = 19;
+repeter
+i = i +1;
+j = j*2;
+tantque(i<10);
+i = i+1;
+j = j+1;
 fintantque;
+jusqua(i == 10);
+pour(k=15;i >13;i = i-1);
+k = i + k;
+finpour;
+lire(i,j,k);
+ecrire(i,j,k);
 finproc
 # Commentaire Final
