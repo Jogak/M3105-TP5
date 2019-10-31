@@ -9,9 +9,9 @@ int main() {
     j = 19;
     if (i==0) {
      j = k;
-    } else if (j==19){
+    } else if (j==19) {
      i = k;
-    } else if (j<i){
+    } else if (j<i) {
      k = i;
     }
     return 0;
