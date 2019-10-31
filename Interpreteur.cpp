@@ -69,7 +69,6 @@ Noeud* Interpreteur::seqInst() {
 
 Noeud* Interpreteur::inst() {
   // <inst> ::= <affectation>  ; | <instSi>
-
     try{
       if (m_lecteur.getSymbole() == "<VARIABLE>") {
         Noeud *affect = affectation();
@@ -109,14 +108,7 @@ Noeud* Interpreteur::inst() {
         m_arbre = nullptr;
         return nullptr;
       }
-    }catch(SyntaxeException const& e){ // on récupère l'exception qui a été levée
-        cout << e.what() << endl;
-        while((m_lecteur.getSymbole()!="si"&& m_lecteur.getSymbole()!="tantque" && m_lecteur.getSymbole()!="pour" &&
-               m_lecteur.getSymbole()!="ecrire" && m_lecteur.getSymbole()!="lire") && m_lecteur.getSymbole()!="<FINDEFICHIER>"){
-            m_lecteur.avancer(); // on fait avancer le lecteur tant qu'il ne lit pas un des symbole du while
-        }
     }
-}
 
 Noeud* Interpreteur::affectation() {
   // <affectation> ::= <variable> = <expression> 
@@ -305,3 +297,16 @@ Noeud* Interpreteur::instEcrire() {
     return new NoeudInstEcrire(noeud,noeudsSupp); // on retourne un noeud inst Ecrire
 }
 
+void Interpreteur::traduitEnCPP(ostream& cout, unsigned int indentation) const{
+    cout << "#include <iostream>" << endl << endl;
+    cout << setw(indentation) << "" << "int main() {" << endl; // Début d’un programme C++
+    for(int i = 0; i<m_table.getTaille(); i++){
+        if(m_table[i] == "<VARIABLE>"){
+        cout << setw(indentation+4) << "" << "int "<<m_table[i].getChaine();
+            cout << ";" << endl;
+        }
+    }
+ if(getArbre() != nullptr ) getArbre()->traduitEnCPP(cout,indentation+4); // lance l'opération traduitEnCPP sur la racine
+ cout << setw(4*(indentation+1)) << "" << "return 0;" << endl ;
+ cout << setw(4*indentation) << "}" << endl ; // Fin d’un programme C++
+}

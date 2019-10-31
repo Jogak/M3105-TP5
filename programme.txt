@@ -2,10 +2,14 @@
 # Les lignes de commentaires commencent par #
 procedure principale()
 i = 0;
-j  = 19
-tantque(i<10)
-i = i 1;
-j = j+;
-fintantque;
+k = 13;
+j = 19;
+si(i==0)
+j = k;
+sinonsi(j==19)
+i = k;
+sinonsi(j<i)
+k = i;
+finsi;
 finproc
 # Commentaire Final
