@@ -20,6 +20,7 @@ class Noeud {
     virtual int  executer() =0 ; // Méthode pure (non implémentée) qui rend la classe abstraite
     virtual void ajoute(Noeud* instruction) { throw OperationInterditeException(); }
     virtual ~Noeud() {} // Présence d'un destructeur virtuel conseillée dans les classes abstraites
+    virtual void traduitEnCPP(ostream & cout, unsigned int indentation) const = 0;
 };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -31,7 +32,7 @@ class NoeudSeqInst : public Noeud {
     ~NoeudSeqInst() {}       // A cause du destructeur virtuel de la classe Noeud
     int executer() override; // Exécute chaque instruction de la séquence
     void ajoute(Noeud* instruction) override;  // Ajoute une instruction à la séquence
-
+    void traduitEnCPP(ostream & cout, unsigned int indentation) const override;
   private:
     vector<Noeud *> m_instructions; // pour stocker les instructions de la séquence
 };
@@ -44,7 +45,7 @@ class NoeudAffectation : public Noeud {
      NoeudAffectation(Noeud* variable, Noeud* expression); // construit une affectation
     ~NoeudAffectation() {}   // A cause du destructeur virtuel de la classe Noeud
     int executer() override; // Exécute (évalue) l'expression et affecte sa valeur à la variable
-
+    void traduitEnCPP(ostream & cout, unsigned int indentation) const override;
   private:
     Noeud* m_variable;
     Noeud* m_expression;
@@ -59,7 +60,7 @@ class NoeudOperateurBinaire : public Noeud {
     // Construit une opération binaire : operandeGauche operateur OperandeDroit
    ~NoeudOperateurBinaire() {} // A cause du destructeur virtuel de la classe Noeud
     int executer() override;   // Exécute (évalue) l'opération binaire)
-
+    void traduitEnCPP(ostream & cout, unsigned int indentation) const override;
   private:
     Symbole m_operateur;
     Noeud*  m_operandeGauche;
@@ -75,7 +76,7 @@ class NoeudInstSi : public Noeud {
      // Construit une "instruction si" avec sa condition et sa séquence d'instruction
    ~NoeudInstSi() {}         // A cause du destructeur virtuel de la classe Noeud
     int executer() override; // Exécute l'instruction si : si condition vraie on exécute la séquence
-
+    void traduitEnCPP(ostream & cout, unsigned int indentation) const override;
   private:
     vector<Noeud*>  m_condition;
     vector<Noeud*>  m_sequence;
@@ -88,7 +89,7 @@ class NoeudInstTantQue : public Noeud {
      // Construit une "instruction si" avec sa condition et sa séquence d'instruction
    ~NoeudInstTantQue() {}         // A cause du destructeur virtuel de la classe Noeud
     int executer() override; // Exécute l'instruction si : si condition vraie on exécute la séquence
-
+    void traduitEnCPP(ostream & cout, unsigned int indentation) const override;
   private:
     Noeud*  m_condition;
     Noeud*  m_sequence;
@@ -100,7 +101,7 @@ public:
     NoeudInstRepeter(Noeud* condition, Noeud* sequence);
     ~NoeudInstRepeter() {}
     int executer() override;
-    
+    void traduitEnCPP(ostream & cout, unsigned int indentation) const override;
 private:
     Noeud* m_condition;
     Noeud* m_sequence;
@@ -111,7 +112,7 @@ public:
     NoeudInstPour(Noeud* affectation1, Noeud* expression, Noeud* affectation2, Noeud* sequence);
     ~NoeudInstPour() {}
     int executer() override;
-    
+    void traduitEnCPP(ostream & cout, unsigned int indentation) const override;
 private:
     Noeud* m_affectation1;
     Noeud* m_affectation2;
@@ -124,6 +125,7 @@ public:
     NoeudInstLire(vector<Noeud*> var);
     ~NoeudInstLire() {}
     int executer() override;
+    void traduitEnCPP(ostream & cout, unsigned int indentation) const override;
 private:
     vector<Noeud*> m_var;
 };
@@ -135,14 +137,11 @@ class NoeudInstEcrire : public Noeud {
     NoeudInstEcrire(Noeud* noeudPremierElement, vector<Noeud*> noeudsSupp);
      // Construit une instruction ecrire avec les vector de noeuds mis en paramètre.
    ~NoeudInstEcrire() {}; // A cause du destructeur virtuel de la classe Noeud
-    int executer();  // Exécute l'instruction ecrire : ecrire ( <expression> | <chaine> puis potentiellement d'autres)
-        void traduitEnCPP(ostream & cout,unsigned int indentation) const;
-    
-
+    int executer();  // Exécute l'instruction ecrire : ecrire ( <expression> | <chaine> puis potentiellement d'autres
+    void traduitEnCPP(ostream & cout, unsigned int indentation) const override;
   private:
       Noeud* m_noeud;
       vector<Noeud*> m_noeudsSupp;
 };
 
 #endif /* ARBREABSTRAIT_H */
-

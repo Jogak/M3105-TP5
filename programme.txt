@@ -1,7 +1,15 @@
 # Fichier de test
 # Les lignes de commentaires commencent par #
 procedure principale()
-
-lire(i,j,k)
+i = 0;
+k = 13;
+j = 19;
+si(i==0)
+j = k;
+sinonsi(j==19)
+i = k;
+sinonsi(j<i)
+k = i;
+finsi;
 finproc
 # Commentaire Final

@@ -1,5 +1,5 @@
 procedure principale()
 
-lire(i,j,k)
+lire(i,j,k);
 
 finproc
