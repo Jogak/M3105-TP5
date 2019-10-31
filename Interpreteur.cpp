@@ -297,15 +297,15 @@ Noeud* Interpreteur::instEcrire() {
 }
 
 void Interpreteur::traduitEnCPP(ostream& cout, unsigned int indentation) const{
-    cout << "#include <iostream>" << endl;
+    cout << "#include <iostream>" << endl << endl;
     cout << setw(indentation) << "" << "int main() {" << endl; // Début d’un programme C++
     for(int i = 0; i<m_table.getTaille(); i++){
         if(m_table[i] == "<VARIABLE>"){
-        cout << setw(indentation+1) << "" << "int "<<m_table[i].getChaine();
+        cout << setw(indentation+4) << "" << "int "<<m_table[i].getChaine();
             cout << ";" << endl;
         }
     }
- if(getArbre() != nullptr ) getArbre()->traduitEnCPP(cout,indentation+1); // lance l'opération traduitEnCPP sur la racine
+ if(getArbre() != nullptr ) getArbre()->traduitEnCPP(cout,indentation+4); // lance l'opération traduitEnCPP sur la racine
  cout << setw(4*(indentation+1)) << "" << "return 0;" << endl ;
  cout << setw(4*indentation) << "}" << endl ; // Fin d’un programme C++
 }

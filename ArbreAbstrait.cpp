@@ -6,6 +6,7 @@
 #include <vector>
 #include <iostream>
 #include <typeinfo>
+#include <fstream>
 ////////////////////////////////////////////////////////////////////////////////
 // NoeudSeqInst
 ////////////////////////////////////////////////////////////////////////////////
@@ -113,22 +114,23 @@ int NoeudInstSi::executer() {
 }
 
 void NoeudInstSi::traduitEnCPP(ostream & cout, unsigned int indentation) const{
-    cout << setw(indentation)<< "if (" ;
+    cout << setw(indentation) << "" << "if (" ;
     m_condition[0]->traduitEnCPP(cout, 0);
     cout << ") {" << endl;
     m_sequence[0]->traduitEnCPP(cout, indentation+1);
-    cout << endl << setw(indentation) << "}" ;
+    cout << setw(indentation) << "" << "}" ;
     for(int i = 1; i<m_sequence.size(); i++){
-            cout << "else ";
+            cout << " else ";
             if( m_sequence.size() == m_condition.size()  || i < m_condition.size()){
                 cout << "if (";
                 m_condition[i]->traduitEnCPP(cout,0);
-                cout << ")";
+                cout << ") ";
             }
             cout << "{" << endl << setw(indentation+1);
             m_sequence[i]->traduitEnCPP(cout, indentation +1);
-            cout << endl << setw(indentation) << "}" << endl;
+            cout << setw(indentation) << "" << "}";
     }
+    cout << endl;
 }
 
 NoeudInstTantQue::NoeudInstTantQue(Noeud* condition, Noeud* sequence)
@@ -161,8 +163,8 @@ int NoeudInstRepeter::executer(){
 void NoeudInstRepeter::traduitEnCPP(ostream& cout, unsigned int indentation) const{
     cout << setw(indentation)<< "" <<"do {" << endl;
     m_sequence->traduitEnCPP(cout,indentation +2);
-    cout << setw(indentation) << "" << "}"<< endl;
-    cout << setw(indentation) << "" << "while (";
+    cout << setw(indentation) << "" << "}";
+    cout << " while (";
     m_condition->traduitEnCPP(cout,0);
     cout << ");" << endl;
 }
@@ -190,7 +192,8 @@ void NoeudInstPour::traduitEnCPP(ostream& cout, unsigned int indentation) const 
     m_expression->traduitEnCPP(cout,indentation+5);
     cout << ";" << endl;
     m_affectation2->traduitEnCPP(cout,indentation + 5);
-    cout << setw(indentation+4) << "" << ") {" << endl;
+    cout.seekp(cout.tellp()-(indentation-1),ios::beg);
+    cout << ") {" << endl;
     m_sequence->traduitEnCPP(cout, indentation+2); 
     cout << setw(indentation) << "" << "}" << endl;
 }
