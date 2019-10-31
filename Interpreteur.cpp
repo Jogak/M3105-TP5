@@ -69,7 +69,7 @@ Noeud* Interpreteur::seqInst() {
 
 Noeud* Interpreteur::inst() {
   // <inst> ::= <affectation>  ; | <instSi>
-try{
+    try{
       if (m_lecteur.getSymbole() == "<VARIABLE>") {
         Noeud *affect = affectation();
         testerEtAvancer(";");
@@ -107,8 +107,8 @@ try{
         }
         m_arbre = nullptr;
         return nullptr;
+      }
     }
-}
 
 Noeud* Interpreteur::affectation() {
   // <affectation> ::= <variable> = <expression> 
@@ -240,6 +240,7 @@ Noeud* Interpreteur::instPour(){
     testerEtAvancer(";");
     return new NoeudInstPour(affectation1, expr, affectation2, sequence);
 }
+
 
 Noeud* Interpreteur::instLire(){
     // <instLire> ::= lire ( <variable> { , <variable> } )
