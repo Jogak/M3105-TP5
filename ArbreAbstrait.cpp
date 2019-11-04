@@ -46,7 +46,7 @@ int NoeudAffectation::executer() {
 
 void NoeudAffectation::traduitEnCPP(ostream & cout, unsigned int indentation) const {
     cout << setw(indentation) << "";
-    m_variable->traduitEnCPP(cout,0);
+    m_variable->traduitEnCPP(cout,0); 
     cout << " = " ;
     m_expression->traduitEnCPP(cout, 0);
     cout << ";" << endl;
@@ -133,6 +133,10 @@ void NoeudInstSi::traduitEnCPP(ostream & cout, unsigned int indentation) const{
     cout << endl;
 }
 
+////////////////////////////////////////////////////////////////////////////////
+// NoeudInstTantQue
+////////////////////////////////////////////////////////////////////////////////
+
 NoeudInstTantQue::NoeudInstTantQue(Noeud* condition, Noeud* sequence)
 : m_condition(condition), m_sequence(sequence) {
 }
@@ -149,6 +153,10 @@ void NoeudInstTantQue::traduitEnCPP(ostream & cout, unsigned int indentation) co
     m_sequence->traduitEnCPP(cout, indentation + 2);
     cout << setw(indentation)<< "" << "}"<< endl;
 }
+
+////////////////////////////////////////////////////////////////////////////////
+// NoeudInstRepeter
+////////////////////////////////////////////////////////////////////////////////
 
 NoeudInstRepeter::NoeudInstRepeter(Noeud* condition, Noeud* sequence)
 : m_condition(condition), m_sequence(sequence) {
@@ -168,6 +176,10 @@ void NoeudInstRepeter::traduitEnCPP(ostream& cout, unsigned int indentation) con
     m_condition->traduitEnCPP(cout,0);
     cout << ");" << endl;
 }
+
+////////////////////////////////////////////////////////////////////////////////
+// NoeudInstPour
+////////////////////////////////////////////////////////////////////////////////
 
 NoeudInstPour::NoeudInstPour(Noeud* affectation1, Noeud* expression, Noeud* affectation2, Noeud* sequence)
 :m_affectation1(affectation1), m_affectation2(affectation2), m_expression(expression), m_sequence(sequence){
@@ -198,6 +210,10 @@ void NoeudInstPour::traduitEnCPP(ostream& cout, unsigned int indentation) const 
     cout << setw(indentation) << "" << "}" << endl;
 }
 
+////////////////////////////////////////////////////////////////////////////////
+// NoeudInstLire
+////////////////////////////////////////////////////////////////////////////////
+
 NoeudInstLire::NoeudInstLire(vector<Noeud*> var)
 : m_var(var){}
 
@@ -220,6 +236,10 @@ void NoeudInstLire::traduitEnCPP(ostream& cout, unsigned int indentation) const 
     }
     cout << ";" << endl;
 }
+
+////////////////////////////////////////////////////////////////////////////////
+// NoeudInstEcrire
+////////////////////////////////////////////////////////////////////////////////
 
 NoeudInstEcrire::NoeudInstEcrire(Noeud* noeudPremierElement, vector<Noeud*> noeudsSupp)
 : m_noeud(noeudPremierElement), m_noeudsSupp(noeudsSupp) {
@@ -256,4 +276,33 @@ void NoeudInstEcrire::traduitEnCPP(ostream& cout, unsigned int indentation) cons
         m_noeudsSupp[i]->traduitEnCPP(cout, 0);
     }
     cout << ";" << endl;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// NoeudInstPermut
+////////////////////////////////////////////////////////////////////////////////
+
+NoeudPermut::NoeudPermut(Noeud* var1, Noeud* var2):m_var1(var1),m_var2(var2){}
+
+
+int NoeudPermut::executer(){
+    
+    int s = ((SymboleValue*)m_var1)->executer();
+    ((SymboleValue *)m_var1)->setValeur(((SymboleValue*)m_var2)->executer());
+    ((SymboleValue*)m_var2)->setValeur(s);
+    
+    return 0;
+}
+
+void NoeudPermut::traduitEnCPP(ostream& cout, unsigned int indentation) const{
+    cout << setw(indentation) << ""  ;
+    cout << "s = ";
+    m_var1->traduitEnCPP(cout, 0);
+    cout << ";" <<endl ;
+    m_var1->traduitEnCPP(cout, indentation);
+    cout << " = " ;
+    m_var2->traduitEnCPP(cout,0);
+    cout << ";"<< endl;
+    m_var2->traduitEnCPP(cout, indentation);
+    cout << " = " << "s ; " << endl;
 }

@@ -20,7 +20,8 @@ public:
 	inline const TableSymboles & getTable () const  { return m_table;    } // accesseur	
 	inline Noeud* getArbre () const { return m_arbre; }                    // accesseur
         void traduitEnCPP(ostream & cout, unsigned int indentation) const;
-	
+	inline int getcptSyntaxeErreur() const {return cptSyntaxeErreur;}
+        
 private:
     Lecteur        m_lecteur;  // Le lecteur de symboles utilisé pour analyser le fichier
     TableSymboles  m_table;    // La table des symboles valués
@@ -28,21 +29,24 @@ private:
     std::vector<Noeud*> vectNoeuds;
     std::vector<SymboleValue*> vectSymbValues;
     const Symbole  chaine; 
+    int cptSyntaxeErreur;
 
     // Implémentation de la grammaire
     Noeud*  programme();   //   <programme> ::= procedure principale() <seqInst> finproc FIN_FICHIER
-    Noeud*  seqInst();	   //     <seqInst> ::= <inst> { <inst> }
-    Noeud*  inst();	       //        <inst> ::= <affectation> ; | <instSi>
+    Noeud*  seqInst();	   //     <seqInst> ::= <inst> { <inst>  }
+    Noeud*  inst();	   //        <inst> ::= <affectation> ; | <instSi> ; | <instTantQue> ; | <instRepeter> ; | <instPour> ; |
+                           //       <instLire> ; | <instEcrire> ; | <instPermut>
     Noeud*  affectation(); // <affectation> ::= <variable> = <expression> 
     Noeud*  expression();  //  <expression> ::= <facteur> { <opBinaire> <facteur> }
     Noeud*  facteur();     //     <facteur> ::= <entier>  |  <variable>  |  - <facteur>  | non <facteur> | ( <expression> )
-    Noeud*  instTantQue(); //   <instRepeter> ::=repeter <seqInst> jusqua( <expression> )        
+    Noeud*  instTantQue(); //   <instTantQue> ::= tantque ( <expression> ) <seqInst> fintantque       
                            //   <opBinaire> ::= + | - | *  | / | < | > | <= | >= | == | != | et | ou
-    Noeud*  instSi();      //      <instSi> ::= si ( <expression> ) <seqInst> finsi
+    Noeud*  instSi();      //      <instSi> ::= si ( <expression> ) <seqInst> {sinonsi(<expression) <seqInst>}[sinon <seqInst>]finsi
     Noeud* instRepeter();  //   <instRepeter> ::=repeter <seqInst> jusqua( <expression> )
     Noeud* instPour();     //   <instPour>    ::=pour( [ <affectation> ] ; <expression> ;[ <affectation> ]) <seqInst> finpour
     Noeud* instLire();     //  <instLire> ::= lire ( <variable> { , <variable> } )
     Noeud* instEcrire();    //<instEcrire> ::= ecrire ( <expression> | <chaine> { , <expression> | <chaine> } )
+    Noeud* instPermut();    // <instPermut> ::= permut (<variable>,<variable>)
                              // outils pour simplifier l'analyse syntaxique
     void tester (const string & symboleAttendu) const;   // Si symbole courant != symboleAttendu, on lève une exception
     void testerEtAvancer(const string & symboleAttendu); // Si symbole courant != symboleAttendu, on lève une exception, sinon on avance

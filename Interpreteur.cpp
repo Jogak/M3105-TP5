@@ -5,7 +5,7 @@
 using namespace std;
 
 Interpreteur::Interpreteur(ifstream & fichier) :
-m_lecteur(fichier), m_table(), m_arbre(nullptr) {
+m_lecteur(fichier), m_table(), m_arbre(nullptr), cptSyntaxeErreur(0) {
 }
 
 void Interpreteur::analyse() {
@@ -60,7 +60,9 @@ Noeud* Interpreteur::seqInst() {
   } while (m_lecteur.getSymbole() == "<VARIABLE>" || m_lecteur.getSymbole() == "si"
           || m_lecteur.getSymbole() == "tantque" 
           || m_lecteur.getSymbole() == "repeter"  || m_lecteur.getSymbole() == "pour"
-          || m_lecteur.getSymbole() == "ecrire"   || m_lecteur.getSymbole() == "lire");
+          || m_lecteur.getSymbole() == "ecrire"   || m_lecteur.getSymbole() == "lire" 
+          || m_lecteur.getSymbole() == "permut"
+          );
 
   // Tant que le symbole courant est un début possible d'instruction...
   // Il faut compléter cette condition chaque fois qu'on rajoute une nouvelle instruction
@@ -88,24 +90,27 @@ Noeud* Interpreteur::inst() {
           return instLire();
       else if (m_lecteur.getSymbole() == "ecrire")
                 return instEcrire();
-      else {
+      else if (m_lecteur.getSymbole() == "permut")
+          return instPermut();
+      else{
           erreur("Instruction incorrecte");
           return nullptr;
       }
     }catch(SyntaxeException const& e){ // on récupère l'exception qui a été levée
         cout << e.what() << endl;
         if (m_lecteur.getSymbole() != "finproc"){
-        while(m_lecteur.getSymbole() != ";"){
+        while(m_lecteur.getSymbole() != ";" || m_lecteur.getSymbole() != "finproc" || m_lecteur.getSymbole() != "<FINDEFICHIER>"){
             m_lecteur.avancer();
         }
         }
         while((m_lecteur.getSymbole()!="si"&& m_lecteur.getSymbole()!="tantque" && m_lecteur.getSymbole()!="pour" &&
                m_lecteur.getSymbole()!="ecrire" && m_lecteur.getSymbole()!="lire") && m_lecteur.getSymbole()!="<FINDEFICHIER>"
-                && m_lecteur.getSymbole() !="<VARIABLE>"  && m_lecteur.getSymbole() !="finproc" ){
+                && m_lecteur.getSymbole() !="<VARIABLE>"  && m_lecteur.getSymbole() !="finproc" && m_lecteur.getSymbole() != "permut" ){
             m_lecteur.avancer(); // on fait avancer le lecteur tant qu'il ne lit pas un des symbole du while
             
         }
         m_arbre = nullptr;
+        cptSyntaxeErreur = cptSyntaxeErreur +1;
         return nullptr;
       }
     }
@@ -167,24 +172,24 @@ Noeud* Interpreteur::instSi() {
     vector<Noeud*> vectorCond;
     testerEtAvancer("si");
     testerEtAvancer("(");
-    Noeud* condition = expression();
-    vectorCond.push_back(condition);
+    Noeud* condition = expression(); // On mémorise la première condition
+    vectorCond.push_back(condition); 
     testerEtAvancer(")");
-    Noeud* sequence = seqInst();
+    Noeud* sequence = seqInst(); // On mémorise la première séquence d'instruction
     vectorSeq.push_back(sequence);
     Symbole var = m_lecteur.getSymbole();
-    while (var == "sinonsi"){
+    while (var == "sinonsi"){  // Tant qu'on trouve un sinonsi, on analyse
         testerEtAvancer("sinonsi");
         testerEtAvancer("(");
-        Noeud* condition = expression(); // On mémorise la condition
-        vectorCond.push_back(condition);
+        Noeud* condition = expression(); // On mémorise la condition du sinonsi actuel
+        vectorCond.push_back(condition); 
         testerEtAvancer(")");
         Noeud* sequence = seqInst();     // On mémorise la séquence d'instruction
         vectorSeq.push_back(sequence);
         var = m_lecteur.getSymbole();
-  }if(var == "sinon"){
+  }if(var == "sinon"){ // Si on tombe sur un sinon,
       testerEtAvancer("sinon");
-      Noeud* sequence = seqInst();
+      Noeud* sequence = seqInst(); // On mémorise sa séquence d'instruction en dernier
       vectorSeq.push_back(sequence);
   }
     testerEtAvancer("finsi");
@@ -193,7 +198,7 @@ Noeud* Interpreteur::instSi() {
 }
 
 Noeud* Interpreteur::instTantQue() {
-  // <instSi> ::= si ( <expression> ) <seqInst> finsi
+  // <instTantQue> ::= tantque ( <expression> ) <seqInst> fintantque
   testerEtAvancer("tantque");
   testerEtAvancer("(");
   Noeud* condition = expression(); // On mémorise la condition
@@ -208,37 +213,38 @@ Noeud* Interpreteur::instTantQue() {
 Noeud* Interpreteur::instRepeter(){
     // <instRepeter> ::=repeter <seqInst> jusqua( <expression> )
     testerEtAvancer("repeter");
-    Noeud* sequence = seqInst();
+    Noeud* sequence = seqInst(); // On mémorise la séquence d'instruction
     testerEtAvancer("jusqua");
     testerEtAvancer("(");
-    Noeud* condition = expression();
+    Noeud* condition = expression(); // on mémorise la condition
     testerEtAvancer(")");
     testerEtAvancer(";");
-    return new NoeudInstRepeter(condition, sequence);
+    return new NoeudInstRepeter(condition, sequence); // on retourne un noeud Instruction Repeter
 }
 
 Noeud* Interpreteur::instPour(){
     // <instPour> ::= pour ( [ <affectation> ] ; <expression> ; [ <affectation> ] ) <seqInst> finpour
     testerEtAvancer("pour");
     testerEtAvancer("(");
-    Noeud* affectation1 = NULL;
-    if( m_lecteur.getSymbole() == "<VARIABLE>"){
+    Noeud* affectation1 = nullptr; 
+    if( m_lecteur.getSymbole() != ";"){ // On cherche à savoir si il y a une première affectation
         affectation1 = affectation();
     }
     testerEtAvancer(";");
     Noeud* expr = expression();
     testerEtAvancer(";");
-    Noeud* affectation2 = NULL;
-    if((affectation2 = affectation()) != NULL){
+    Noeud* affectation2 = nullptr;
+    if(m_lecteur.getSymbole() != ")"){ // On cherche à savoir si il y a une deuxième affectation
+        affectation2 = affectation();
     }else{
         m_lecteur.avancer();
     }
     testerEtAvancer(")");
     testerEtAvancer(";");
-    Noeud* sequence = seqInst();
+    Noeud* sequence = seqInst(); // On mémorise la séquence d'instruction
     testerEtAvancer("finpour");
     testerEtAvancer(";");
-    return new NoeudInstPour(affectation1, expr, affectation2, sequence);
+    return new NoeudInstPour(affectation1, expr, affectation2, sequence); // on retourne un noeud Instruction Pour
 }
 
 
@@ -247,10 +253,10 @@ Noeud* Interpreteur::instLire(){
     vector<Noeud*> vectorVar;
     testerEtAvancer("lire");
     testerEtAvancer("(");
-    SymboleValue* var = m_table.chercheAjoute(m_lecteur.getSymbole());
-    while(Symbole(var->getChaine()) == "<VARIABLE>"){
+    SymboleValue* var = m_table.chercheAjoute(m_lecteur.getSymbole()); // On mémorise la première variable
+    while(Symbole(var->getChaine()) == "<VARIABLE>"){ // On regarde si il y a d'autres variable à lire
        
-        vectorVar.push_back(var);
+        vectorVar.push_back(var); // On mémorise la nouvelle variable
         m_lecteur.avancer();
         if(m_lecteur.getSymbole()==","){
             testerEtAvancer(",");
@@ -258,9 +264,9 @@ Noeud* Interpreteur::instLire(){
             testerEtAvancer(")");
             testerEtAvancer(";");
         }
-        var = m_table.chercheAjoute(m_lecteur.getSymbole());
+        var = m_table.chercheAjoute(m_lecteur.getSymbole()); // On ajoute la varibale trouvée à la table des symboles
     }    
-    return new NoeudInstLire(vectorVar);    
+    return new NoeudInstLire(vectorVar);    // on retourne un noeud instruction Lire
 }
 
 Noeud* Interpreteur::instEcrire() {
@@ -297,6 +303,26 @@ Noeud* Interpreteur::instEcrire() {
     return new NoeudInstEcrire(noeud,noeudsSupp); // on retourne un noeud inst Ecrire
 }
 
+Noeud* Interpreteur::instPermut(){
+    Noeud* var1 = nullptr;
+    Noeud* var2 = nullptr;
+    m_table.chercheAjoute( Symbole ("s")); // On ajoute une variable s à la table, pour la traduction en C++
+    testerEtAvancer("permut");
+    testerEtAvancer("(");
+    if(m_lecteur.getSymbole() == "<VARIABLE>"){ 
+        var1 = m_table.chercheAjoute(m_lecteur.getSymbole()); // On récupère la première variable
+        m_lecteur.avancer();
+    }
+    testerEtAvancer(",");
+    if(m_lecteur.getSymbole() == "<VARIABLE>"){
+        var2 = m_table.chercheAjoute(m_lecteur.getSymbole()); // On récupère la seconde variable
+        m_lecteur.avancer();
+    }
+    testerEtAvancer(")");
+    testerEtAvancer(";");
+    return new NoeudPermut(var1,var2); // on retourne un noeud instPermut
+}
+
 void Interpreteur::traduitEnCPP(ostream& cout, unsigned int indentation) const{
     cout << "#include <iostream>" << endl << endl;
     cout << setw(indentation) << "" << "int main() {" << endl; // Début d’un programme C++
@@ -310,3 +336,6 @@ void Interpreteur::traduitEnCPP(ostream& cout, unsigned int indentation) const{
  cout << setw(4*(indentation+1)) << "" << "return 0;" << endl ;
  cout << setw(4*indentation) << "}" << endl ; // Fin d’un programme C++
 }
+
+
+

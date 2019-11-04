@@ -1,0 +1,12 @@
+# Test Permut
+# résultat attendu :
+# Avant instruction : i = 0, k = 13
+# Après instruction, i = 13, k = 0
+procedure principale()
+i = 0;
+k = 13;
+ecrire("Avant instruction : ","i:",i,"k:",k);
+permut(i,k);
+ecrire("Apres instructions : ","i:",i,"k:",k);
+finproc
+# Commentaire Final

@@ -1,0 +1,18 @@
+# Test instruction si
+# Résultat attendu : 2 erreurs de syntaxe
+
+procedure principale()
+#Erreur de syntaxe, i n'est pas affecté correctement
+i == 3;
+j = 4;
+si (i == j)
+i = 3;
+j = 9;
+sinonsi( i<3)
+i = j;
+j = j+1;
+finsi
+#Erreur de syntaxe attendu car pas de ";" après le "finsi"
+finproc
+
+# Commentaire Final
