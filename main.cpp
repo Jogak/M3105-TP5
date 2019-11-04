@@ -18,6 +18,10 @@ int main(int argc, char* argv[]) {
         Interpreteur interpreteur(fichier);
         interpreteur.analyse();
         // Si pas d'exception levée, l'analyse syntaxique a réussi
+        if(interpreteur.getcptSyntaxeErreur() != 0){
+            cout << endl << "================ Syntaxe Incorrecte" ;
+            cout << endl << interpreteur.getcptSyntaxeErreur() << " erreur de syntaxe trouvé dans le programme, impossible d'executer le programme" << endl;
+        } else { 
         cout << endl << "================ Syntaxe Correcte" << endl;
         // On affiche le contenu de la table des symboles avant d'exécuter le programme
         cout << endl << "================ Table des symboles avant exécution : " << interpreteur.getTable();
@@ -30,7 +34,7 @@ int main(int argc, char* argv[]) {
         interpreteur.traduitEnCPP(cout, 0);
         }
         // Et on vérifie qu'il a fonctionné en regardant comment il a modifié la table des symboles
-        cout << endl << "================ Table des symboles apres exécution : " << interpreteur.getTable();
+        cout << endl << "================ Table des symboles apres exécution : " << interpreteur.getTable(); }
     } catch (InterpreteurException & e) {
         cout << e.what() << endl;
     }

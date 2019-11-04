@@ -1,0 +1,18 @@
+#Test instruction si riche
+#Résultat attendu :
+#i = 4
+#j = i = 4
+#k indéfini
+
+procedure principale()
+i = 4;
+j = 3;
+si(i == 3)
+k = i;
+sinonsi(j == 3)
+j = 4;
+sinon
+i = 2;
+finsi;
+finproc
+# Commentaire Final

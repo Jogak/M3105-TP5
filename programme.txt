@@ -3,13 +3,6 @@
 procedure principale()
 i = 0;
 k = 13;
-j = 19;
-si(i==0)
-j = k;
-sinonsi(j==19)
-i = k;
-sinonsi(j<i)
-k = i;
-finsi;
+ecrire("i:",i,"k:",k);
 finproc
 # Commentaire Final

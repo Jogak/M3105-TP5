@@ -1,5 +1,11 @@
+#Test Instruction Lire
+#Avant instruction : variable i,j,k indéfini
+#Resultat attendu : i,j,k prennent les valeurs rentrées au clavier (int)
+
 procedure principale()
+#Saisie consécutive de 3 variables
 
 lire(i,j,k);
 
 finproc
+# Commentaire Final

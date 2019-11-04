@@ -1,7 +1,10 @@
+#Test instruction pour
+#Resultat attendu : i = 10, k = 28
 procedure principale()
 i = 1;
 k = 19;
-pour(;i<10;i=i+1)
+pour(i = 1;i<10; i = i +1);
 k = k+1;
-finpour
+finpour;
 finproc
+# Commentaire Final
