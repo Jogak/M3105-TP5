@@ -63,7 +63,6 @@ Noeud* Interpreteur::seqInst() {
           || m_lecteur.getSymbole() == "ecrire"   || m_lecteur.getSymbole() == "lire" 
           || m_lecteur.getSymbole() == "permut"
           );
-
   // Tant que le symbole courant est un début possible d'instruction...
   // Il faut compléter cette condition chaque fois qu'on rajoute une nouvelle instruction
   return sequence;
@@ -114,6 +113,7 @@ Noeud* Interpreteur::inst() {
         return nullptr;
       }
     }
+
 
 Noeud* Interpreteur::affectation() {
   // <affectation> ::= <variable> = <expression> 
