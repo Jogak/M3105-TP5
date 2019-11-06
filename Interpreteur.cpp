@@ -71,27 +71,6 @@ Noeud* Interpreteur::seqInst() {
 
 Noeud* Interpreteur::inst() {
   // <inst> ::= <affectation>  ; | <instSi>
-  if (m_lecteur.getSymbole() == "<VARIABLE>") {
-    Noeud *affect = affectation();
-    testerEtAvancer(";");
-    return affect;
-  }
-  else if (m_lecteur.getSymbole() == "si")
-    return instSi();
-  // Compléter les alternatives chaque fois qu'on rajoute une nouvelle instruction
-  else if (m_lecteur.getSymbole() == "tantque")
-      return instTantQue();
-  else if (m_lecteur.getSymbole() == "repeter")
-      return instRepeter();
-  else if (m_lecteur.getSymbole() == "pour")
-      return instPour();
-  else if (m_lecteur.getSymbole() == "ecrire")
-      return instEcrire();
-  else {
-      erreur("Instruction incorrecte");
-      return nullptr;
-  }
-}
     try{
       if (m_lecteur.getSymbole() == "<VARIABLE>") {
         Noeud *affect = affectation();
@@ -135,6 +114,7 @@ Noeud* Interpreteur::inst() {
         return nullptr;
       }
     }
+
 
 
 Noeud* Interpreteur::affectation() {
@@ -291,8 +271,7 @@ Noeud* Interpreteur::instLire(){
     return new NoeudInstLire(vectorVar);    // on retourne un noeud instruction Lire
 }
 
-Noeud* Interpreteur::instEcrire(){
-       // <instEcrire>  ::= ecrire( <expression> | <chaine> {, <expression> | <chaine> })
+
 Noeud* Interpreteur::instEcrire() {
     // <instEcrire>  ::= ecrire( <expression> | <chaine> {, <expression> | <chaine> })
     Noeud* noeud = nullptr;
@@ -334,6 +313,7 @@ Noeud* Interpreteur::instEcrire() {
     return new NoeudInstEcrire(noeud,noeudsSupp);
 }
     return new NoeudInstEcrire(noeud,noeudsSupp); // on retourne un noeud inst Ecrire
+}
 }
 
 Noeud* Interpreteur::instPermut(){
