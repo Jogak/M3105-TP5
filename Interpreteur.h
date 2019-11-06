@@ -38,6 +38,10 @@ private:
                            //       <instLire> ; | <instEcrire> ; | <instPermut>
     Noeud*  affectation(); // <affectation> ::= <variable> = <expression> 
     Noeud*  expression();  //  <expression> ::= <facteur> { <opBinaire> <facteur> }
+    Noeud*  expEt();
+    Noeud*  expComp();
+    Noeud*  expAdd();
+    Noeud*  expMult();
     Noeud*  facteur();     //     <facteur> ::= <entier>  |  <variable>  |  - <facteur>  | non <facteur> | ( <expression> )
     Noeud*  instTantQue(); //   <instTantQue> ::= tantque ( <expression> ) <seqInst> fintantque       
                            //   <opBinaire> ::= + | - | *  | / | < | > | <= | >= | == | != | et | ou
