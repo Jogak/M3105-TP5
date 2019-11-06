@@ -1,13 +1,14 @@
 # Fichier de test
 # Les lignes de commentaires commencent par #
 procedure principale()
-  i = 0;
+  i = 1;
   k = 3;
-pour( j=1 ; j<6 ; j = j+1 )
-k=k+2;
-finpour
-repeter
- i = i+1;
-jusqua (i == 25)
+si(i <= 1)
+k = 0;
+sinonsi(k==0)
+i = 100;
+sinon
+k=50;
+finsi
 finproc
 # Commentaire Final

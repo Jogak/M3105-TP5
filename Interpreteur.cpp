@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <iostream>
 #include <typeinfo>
+#include <vector>
 using namespace std;
 
 Interpreteur::Interpreteur(ifstream & fichier) :
@@ -58,9 +59,10 @@ Noeud* Interpreteur::seqInst() {
   do {
     sequence->ajoute(inst());
   } while (m_lecteur.getSymbole() == "<VARIABLE>" || m_lecteur.getSymbole() == "si"
-          || m_lecteur.getSymbole() == "tantque" || m_lecteur.getSymbole() == "repeter" 
-          || m_lecteur.getSymbole() == "pour"
+          || m_lecteur.getSymbole() == "tantque" 
+          || m_lecteur.getSymbole() == "repeter"  || m_lecteur.getSymbole() == "pour"
           || m_lecteur.getSymbole() == "ecrire");
+
   // Tant que le symbole courant est un début possible d'instruction...
   // Il faut compléter cette condition chaque fois qu'on rajoute une nouvelle instruction
   return sequence;
@@ -142,14 +144,33 @@ Noeud* Interpreteur::facteur() {
 }
 
 Noeud* Interpreteur::instSi() {
-  // <instSi> ::= si ( <expression> ) <seqInst> finsi
-  testerEtAvancer("si");
-  testerEtAvancer("(");
-  Noeud* condition = expression(); // On mémorise la condition
-  testerEtAvancer(")");
-  Noeud* sequence = seqInst();     // On mémorise la séquence d'instruction
-  testerEtAvancer("finsi");
-  return new NoeudInstSi(condition, sequence); // Et on renvoie un noeud Instruction Si
+  // <instSiRiche> ::= si (<expression>) <seqInst> { sinonsi (<expression>) <seqInst> } [sinon <seqInst>] finsi
+    vector<Noeud*> vectorSeq;
+    vector<Noeud*> vectorCond;
+    testerEtAvancer("si");
+    testerEtAvancer("(");
+    Noeud* condition = expression();
+    vectorCond.push_back(condition);
+    testerEtAvancer(")");
+    Noeud* sequence = seqInst();
+    vectorSeq.push_back(sequence);
+    Symbole var = m_lecteur.getSymbole();
+    while (var == "sinonsi"){
+        testerEtAvancer("sinonsi");
+        testerEtAvancer("(");
+        Noeud* condition = expression(); // On mémorise la condition
+        vectorCond.push_back(condition);
+        testerEtAvancer(")");
+        Noeud* sequence = seqInst();     // On mémorise la séquence d'instruction
+        vectorSeq.push_back(sequence);
+        var = m_lecteur.getSymbole();
+  }if(var == "sinon"){
+      testerEtAvancer("sinon");
+      Noeud* sequence = seqInst();
+      vectorSeq.push_back(sequence);
+  }
+    testerEtAvancer("finsi");
+  return new NoeudInstSi( vectorCond,vectorSeq); // Et on renvoie un noeud Instruction Si
 }
 
 Noeud* Interpreteur::instTantQue() {
