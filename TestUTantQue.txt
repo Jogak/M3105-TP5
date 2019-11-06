@@ -1,0 +1,10 @@
+#Test unitaire de l'instruction tant que
+procedure principale()
+i = 3;
+j = 1;
+tantque (i <= 5);
+i = i +1;
+j = j * 2;
+fintantque;
+finproc
+# Commentaire finale

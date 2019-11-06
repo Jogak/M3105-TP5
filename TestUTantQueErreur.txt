@@ -1,0 +1,9 @@
+# Test unitaire de l'instruction tant que qui doit lever une Syntaxe Exception
+
+procedure principale()
+i = 4;
+tantque(i<5);
+i = i+2;
+
+finproc
+# Commentaire finale

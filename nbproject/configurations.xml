@@ -15,6 +15,8 @@
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
                    projectFiles="true">
+      <itemPath>TestUTantQue.txt</itemPath>
+      <itemPath>TestUTantQueErreur.txt</itemPath>
       <itemPath>motsCles.txt</itemPath>
       <itemPath>programme.txt</itemPath>
       <itemPath>testInstEcrire.txt</itemPath>
@@ -41,6 +43,14 @@
                    displayName="Test Files"
                    projectFiles="false"
                    kind="TEST_LOGICAL_FOLDER">
+      <logicalFolder name="f1"
+                     displayName="TestUnitaire TantQue"
+                     projectFiles="true"
+                     kind="TEST">
+        <itemPath>TestRunnerTantQue.cpp</itemPath>
+        <itemPath>TestTantQue.cpp</itemPath>
+        <itemPath>TestTantQue.h</itemPath>
+      </logicalFolder>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -60,6 +70,7 @@
       <compileType>
         <ccTool>
           <standard>8</standard>
+          <commandLine>-lcppunit</commandLine>
         </ccTool>
       </compileType>
       <item path="ArbreAbstrait.cpp" ex="false" tool="1" flavor2="0">
@@ -88,6 +99,30 @@
       </item>
       <item path="TableSymboles.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="TestRunnerTantQue.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="TestTantQue.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="TestTantQue.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="TestUTantQue.txt" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="TestUTantQueErreur.txt" ex="false" tool="3" flavor2="0">
+      </item>
+      <folder path="TestFiles/f1">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f1</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="motsCles.txt" ex="false" tool="3" flavor2="0">
@@ -157,6 +192,30 @@
       </item>
       <item path="TableSymboles.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="TestRunnerTantQue.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="TestTantQue.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="TestTantQue.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="TestUTantQue.txt" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="TestUTantQueErreur.txt" ex="false" tool="3" flavor2="0">
+      </item>
+      <folder path="TestFiles/f1">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f1</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="motsCles.txt" ex="false" tool="3" flavor2="0">

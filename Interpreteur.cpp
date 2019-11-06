@@ -42,7 +42,7 @@ void Interpreteur::erreur(const string & message) const {
 
 Noeud* Interpreteur::programme() {
   // <programme> ::= procedure principale() <seqInst> finproc FIN_FICHIER
-  testerEtAvancer("procedure");
+  try{testerEtAvancer("procedure");
   testerEtAvancer("principale");
   testerEtAvancer("(");
   testerEtAvancer(")");
@@ -50,11 +50,14 @@ Noeud* Interpreteur::programme() {
   testerEtAvancer("finproc");
   tester("<FINDEFICHIER>");
   return sequence;
+  } catch(SyntaxeException &e){
+      throw;
+  }
 }
 
 Noeud* Interpreteur::seqInst() {
   // <seqInst> ::= <inst> { <inst> }
-  NoeudSeqInst* sequence = new NoeudSeqInst();
+  try { NoeudSeqInst* sequence = new NoeudSeqInst();
   do {
     sequence->ajoute(inst());
   } while (m_lecteur.getSymbole() == "<VARIABLE>" || m_lecteur.getSymbole() == "si"
@@ -66,6 +69,9 @@ Noeud* Interpreteur::seqInst() {
   // Tant que le symbole courant est un début possible d'instruction...
   // Il faut compléter cette condition chaque fois qu'on rajoute une nouvelle instruction
   return sequence;
+  } catch(SyntaxeException &e){
+      throw;
+  }
 }
 
 Noeud* Interpreteur::inst() {
@@ -117,12 +123,15 @@ Noeud* Interpreteur::inst() {
 
 Noeud* Interpreteur::affectation() {
   // <affectation> ::= <variable> = <expression> 
-  tester("<VARIABLE>");
+  try{tester("<VARIABLE>");
   Noeud* var = m_table.chercheAjoute(m_lecteur.getSymbole()); // La variable est ajoutée à la table eton la mémorise
   m_lecteur.avancer();
   testerEtAvancer("=");
   Noeud* exp = expression();             // On mémorise l'expression trouvée
   return new NoeudAffectation(var, exp); // On renvoie un noeud affectation
+  } catch(SyntaxeException &e){
+      throw;
+  }
 }
 
 Noeud* Interpreteur::expression() {
@@ -140,7 +149,7 @@ Noeud* Interpreteur::expression() {
 
 Noeud* Interpreteur::facteur() {
   // <facteur> ::= <entier> | <variable> | - <facteur> | non <facteur> | ( <expression> )
-  Noeud* fact = nullptr;
+  try{Noeud* fact = nullptr;
   if (m_lecteur.getSymbole() == "<VARIABLE>" || m_lecteur.getSymbole() == "<ENTIER>") {
     fact = m_table.chercheAjoute(m_lecteur.getSymbole()); // on ajoute la variable ou l'entier à la table
     m_lecteur.avancer();
@@ -159,6 +168,9 @@ Noeud* Interpreteur::facteur() {
   } else
     erreur("Facteur incorrect");
   return fact;
+  } catch (SyntaxeException &e){
+      throw;
+  }
 }
 
 Noeud* Interpreteur::expEt(){
@@ -209,7 +221,7 @@ Noeud* Interpreteur::expMult(){
 
 Noeud* Interpreteur::instSi() {
   // <instSiRiche> ::= si (<expression>) <seqInst> { sinonsi (<expression>) <seqInst> } [sinon <seqInst>] finsi
-    vector<Noeud*> vectorSeq;
+    try{vector<Noeud*> vectorSeq;
     vector<Noeud*> vectorCond;
     testerEtAvancer("si");
     testerEtAvancer("(");
@@ -236,11 +248,14 @@ Noeud* Interpreteur::instSi() {
     testerEtAvancer("finsi");
     testerEtAvancer(";");
   return new NoeudInstSi( vectorCond,vectorSeq); // Et on renvoie un noeud Instruction Si
+  } catch(SyntaxeException &e){
+      throw;
+  }
 }
 
 Noeud* Interpreteur::instTantQue() {
   // <instTantQue> ::= tantque ( <expression> ) <seqInst> fintantque
-  testerEtAvancer("tantque");
+  try{testerEtAvancer("tantque");
   testerEtAvancer("(");
   Noeud* condition = expression(); // On mémorise la condition
   testerEtAvancer(")");
@@ -248,12 +263,15 @@ Noeud* Interpreteur::instTantQue() {
   Noeud* sequence = seqInst();     // On mémorise la séquence d'instruction
   testerEtAvancer("fintantque");
   testerEtAvancer(";");
-  return new NoeudInstTantQue(condition, sequence); // Et on renvoie un noeud Instruction Tant Que
+  return new NoeudInstTantQue(condition, sequence); // Et on renvoie un noeud Instruction Tant Que}
+  } catch(SyntaxeException &e){
+      throw;
+  }
 }
 
 Noeud* Interpreteur::instRepeter(){
     // <instRepeter> ::=repeter <seqInst> jusqua( <expression> )
-    testerEtAvancer("repeter");
+    try{testerEtAvancer("repeter");
     Noeud* sequence = seqInst(); // On mémorise la séquence d'instruction
     testerEtAvancer("jusqua");
     testerEtAvancer("(");
@@ -261,11 +279,14 @@ Noeud* Interpreteur::instRepeter(){
     testerEtAvancer(")");
     testerEtAvancer(";");
     return new NoeudInstRepeter(condition, sequence); // on retourne un noeud Instruction Repeter
+    } catch(SyntaxeException &e){
+      throw;
+  }
 }
 
 Noeud* Interpreteur::instPour(){
     // <instPour> ::= pour ( [ <affectation> ] ; <expression> ; [ <affectation> ] ) <seqInst> finpour
-    testerEtAvancer("pour");
+    try{testerEtAvancer("pour");
     testerEtAvancer("(");
     Noeud* affectation1 = nullptr; 
     if( m_lecteur.getSymbole() != ";"){ // On cherche à savoir si il y a une première affectation
@@ -286,12 +307,15 @@ Noeud* Interpreteur::instPour(){
     testerEtAvancer("finpour");
     testerEtAvancer(";");
     return new NoeudInstPour(affectation1, expr, affectation2, sequence); // on retourne un noeud Instruction Pour
+    } catch(SyntaxeException &e){
+      throw;
+  }
 }
 
 
 Noeud* Interpreteur::instLire(){
     // <instLire> ::= lire ( <variable> { , <variable> } )
-    vector<Noeud*> vectorVar;
+    try{vector<Noeud*> vectorVar;
     testerEtAvancer("lire");
     testerEtAvancer("(");
     SymboleValue* var = m_table.chercheAjoute(m_lecteur.getSymbole()); // On mémorise la première variable
@@ -308,11 +332,14 @@ Noeud* Interpreteur::instLire(){
         var = m_table.chercheAjoute(m_lecteur.getSymbole()); // On ajoute la varibale trouvée à la table des symboles
     }    
     return new NoeudInstLire(vectorVar);    // on retourne un noeud instruction Lire
+    } catch(SyntaxeException &e){
+      throw;
+  }
 }
 
 Noeud* Interpreteur::instEcrire() {
     // <instEcrire>  ::= ecrire( <expression> | <chaine> {, <expression> | <chaine> })
-    Noeud* noeud = nullptr;
+    try{Noeud* noeud = nullptr;
     Noeud* noeud2 = nullptr;
     testerEtAvancer("ecrire");
     testerEtAvancer("(");
@@ -342,10 +369,13 @@ Noeud* Interpreteur::instEcrire() {
     testerEtAvancer(";");
     
     return new NoeudInstEcrire(noeud,noeudsSupp); // on retourne un noeud inst Ecrire
+    } catch(SyntaxeException &e){
+      throw;
+  }
 }
 
 Noeud* Interpreteur::instPermut(){
-    Noeud* var1 = nullptr;
+    try{Noeud* var1 = nullptr;
     Noeud* var2 = nullptr;
     m_table.chercheAjoute( Symbole ("s")); // On ajoute une variable s à la table, pour la traduction en C++
     testerEtAvancer("permut");
@@ -362,6 +392,9 @@ Noeud* Interpreteur::instPermut(){
     testerEtAvancer(")");
     testerEtAvancer(";");
     return new NoeudPermut(var1,var2); // on retourne un noeud instPermut
+    } catch(SyntaxeException &e){
+      throw;
+  }
 }
 
 void Interpreteur::traduitEnCPP(ostream& cout, unsigned int indentation) const{

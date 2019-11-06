@@ -1,12 +1,15 @@
 #Test instruction tant que
 #Instruction tant que executee 3 fois
 #Résultat attendu : j = 3 = i
+# k = 10
 procedure principale()
 
 i = 3;
 j = 0;
+k = 4;
 tantque(j<i);
 j = j+1;
+k = k +2;
 fintantque;
 finproc
 # Commentaire Final

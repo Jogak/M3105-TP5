@@ -2,9 +2,12 @@
 
 int main() {
     int i;
-    int k;
-    i = 0;
-    k = 13;
-    std::cout << "i:" << i << "k:" << k;
+    int j;
+    i = 3;
+    j = 1;
+    while (i<=5) {
+      i = i+1;
+      j = j*2;
+    }
     return 0;
 }
