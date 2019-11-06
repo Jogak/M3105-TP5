@@ -17,7 +17,14 @@
                    projectFiles="true">
       <itemPath>motsCles.txt</itemPath>
       <itemPath>programme.txt</itemPath>
+      <itemPath>testInstEcrire.txt</itemPath>
+      <itemPath>testInstLire.txt</itemPath>
+      <itemPath>testInstPour.txt</itemPath>
+      <itemPath>testInstRepeter.txt</itemPath>
+      <itemPath>testInstSiRiche.txt</itemPath>
       <itemPath>testInstTantQue.txt</itemPath>
+      <itemPath>testPermut.txt</itemPath>
+      <itemPath>testSiErreur.txt</itemPath>
     </logicalFolder>
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
@@ -87,7 +94,21 @@
       </item>
       <item path="programme.txt" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="testInstEcrire.txt" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="testInstLire.txt" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="testInstPour.txt" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="testInstRepeter.txt" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="testInstSiRiche.txt" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="testInstTantQue.txt" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="testPermut.txt" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="testSiErreur.txt" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
     <conf name="Release" type="1">
@@ -142,7 +163,21 @@
       </item>
       <item path="programme.txt" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="testInstEcrire.txt" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="testInstLire.txt" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="testInstPour.txt" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="testInstRepeter.txt" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="testInstSiRiche.txt" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="testInstTantQue.txt" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="testPermut.txt" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="testSiErreur.txt" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
   </confs>

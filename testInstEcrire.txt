@@ -1,0 +1,6 @@
+#Test instruction Ecrire
+#Resultat attendu : affiche de i : ' 13, "oui" '
+procedure principale()
+i = 13;
+ecrire(i,"oui");
+finproc
