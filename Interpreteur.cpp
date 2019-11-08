@@ -209,12 +209,25 @@ Noeud* Interpreteur::expAdd(){
 }
 
 Noeud* Interpreteur::expMult(){
-    Noeud* fact = facteur();
+    Noeud*  parent = expparent();
     while(m_lecteur.getSymbole()=="*"||m_lecteur.getSymbole()=="/"){
+        Symbole operateur = m_lecteur.getSymbole();
+        m_lecteur.avancer();
+        Noeud* parentdroite = expparent();
+        parent = new NoeudOperateurBinaire(operateur, parent, parentdroite);
+    }
+    return parent;
+}
+
+Noeud* Interpreteur::expparent(){
+    Noeud* fact = facteur();
+    if(m_lecteur.getSymbole()=="("){
+    while(m_lecteur.getSymbole()!=")"){
         Symbole operateur = m_lecteur.getSymbole();
         m_lecteur.avancer();
         Noeud* facteurdroite = facteur();
         fact = new NoeudOperateurBinaire(operateur, fact, facteurdroite);
+    }
     }
     return fact;
 }

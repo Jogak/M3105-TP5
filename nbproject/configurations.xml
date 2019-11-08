@@ -27,6 +27,7 @@
       <itemPath>testInstTantQue.txt</itemPath>
       <itemPath>testPermut.txt</itemPath>
       <itemPath>testSiErreur.txt</itemPath>
+      <itemPath>testpriooperations.txt</itemPath>
     </logicalFolder>
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
@@ -58,7 +59,6 @@
                    kind="IMPORTANT_FILES_FOLDER">
       <itemPath>Makefile</itemPath>
     </logicalFolder>
-    <itemPath>testpriooperations.txt</itemPath>
   </logicalFolder>
   <projectmakefile>Makefile</projectmakefile>
   <confs>

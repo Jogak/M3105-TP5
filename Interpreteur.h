@@ -42,6 +42,7 @@ private:
     Noeud*  expComp();
     Noeud*  expAdd();
     Noeud*  expMult();
+    Noeud*  expparent();
     Noeud*  facteur();     //     <facteur> ::= <entier>  |  <variable>  |  - <facteur>  | non <facteur> | ( <expression> )
     Noeud*  instTantQue(); //   <instTantQue> ::= tantque ( <expression> ) <seqInst> fintantque       
                            //   <opBinaire> ::= + | - | *  | / | < | > | <= | >= | == | != | et | ou
